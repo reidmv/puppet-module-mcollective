@@ -12,4 +12,9 @@ class mcollective::params {
     $server_service = 'mcollective'
   }
 
+  $server_user  = 'root'
+  $server_group = 'root'
+  $server_config_file_mode      = '0600'
+  $server_config_directory_mode = '0700'
+
 }
