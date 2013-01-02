@@ -4,7 +4,7 @@ require 'ruby-debug'
 Puppet::Type.type(:mcollective_setting).provide(
   :parsed,
   :parent         => Puppet::Provider::ParsedFile,
-  :default_target => File.join(Facter.value('mcollective_confdir'), 'server.cfg'),
+  :default_target => '', # real default is set in the type definition
   :filetype       => :flat
 ) do
 
@@ -15,12 +15,9 @@ Puppet::Type.type(:mcollective_setting).provide(
 
   record_line(
     :parsed,
-    :fields     => %w{name value},
+    :fields     => %w{name value comment},
     :optional   => %w{comment},
-    :match      => /^\s*(\S+)\s*=\s*(\S+)\s*(:?#(.*))?$/,
-    :post_parse => proc { |hash|
-      hash[:comment] = '' unless hash[:comment]
-    },
+    :match      => /^\s*(\S+)\s*=\s*(\S+)\s*(?:#\s*(.*))?$/,
     :to_line    => proc { |hash|
       [:name, :value].each do |n|
         unless hash[n] and hash[n] != :absent
@@ -28,8 +25,8 @@ Puppet::Type.type(:mcollective_setting).provide(
         end
       end
       str = "#{hash[:name]} = #{hash[:value]}"
-      if hash.include? :comment and !hash[:comment].empty?
-        str += " ##{hash[:comment]}"
+      unless [:absent, nil, ''].include?(hash[:comment])
+        str += " # #{hash[:comment]}"
       end
       str
     }
