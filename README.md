@@ -22,9 +22,11 @@
     mcollective_setting { "$pool.use_exponential_back_off": value => 'true'  }
     mcollective_setting { "$pool.back_off_multiplier":      value => '2'     }
     mcollective_setting { "$pool.max_reconnect_attempts":   value => '0'     }
-    mcollective_setting { "$pool.randomize":                value => 'false' }
-    mcollective_setting { "$pool.timeout":                  value => '-1     }
-    mcollective_setting { "$pool.connect_timeout":          value => '30'    }
+
+    # Settings, even more abbreviated
+    mcollective_setting { "$pool.randomize = false":    }
+    mcollective_setting { "$pool.timeout = -1":         }
+    mcollective_setting { "$pool.connect_timeout = 30": }
 
     # Failover Pool Configuration
     class { 'mcollective::stomp_failover_pool':

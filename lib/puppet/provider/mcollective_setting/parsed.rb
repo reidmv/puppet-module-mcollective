@@ -1,5 +1,4 @@
 require 'puppet/provider/parsedfile'
-require 'ruby-debug'
 
 Puppet::Type.type(:mcollective_setting).provide(
   :parsed,

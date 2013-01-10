@@ -23,4 +23,25 @@ Puppet::Type.newtype(:mcollective_setting) do
     desc "The comment to give the configuration key"
   end
 
+  # Our title_patterns method should allow for specifying both the name and
+  # the value in order to enable shorthand setting declaration
+  def self.title_patterns
+    identity = lambda {|x| x}
+    [
+      [
+        /^([^=]+)$/,
+        [
+          [ :name, identity ]
+        ]
+      ],
+      [
+        /^(.*\S)\s*=\s*(\S.*)$/,
+        [
+          [ :name, identity ],
+          [ :value, identity ]
+        ]
+      ]
+    ]
+  end
+
 end
