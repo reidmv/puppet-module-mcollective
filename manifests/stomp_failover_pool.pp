@@ -40,13 +40,17 @@ class mcollective::stomp_failover_pool (
   else { $ssl_array = [$ssl] }
 
   $array_size = size($host_array)
-  $zipdelim = ','
+  $index      = range('1', $array_size)
+  $zipdelim   = ','
 
-  $add_port     = zipjoin($host_array, $port_array, $zipdelim)
-  $add_user     = zipjoin($add_port, $user_array, $zipdelim)
-  $add_password = zipjoin($add_user, $password_array, $zipdelim)
-  $add_ssl      = zipjoin($add_password, $ssl_array, $zipdelim)
-  $records      = zipjoin($add_ssl, range('1', $array_size), $zipdelim)
+  $records = zipjoin($zipdelim,
+    $host_array,
+    $port_array,
+    $user_array,
+    $password_array,
+    $ssl_array,
+    $index
+  )
 
   mcollective_setting { 'plugin.stomp.pool.size': value => $array_size }
 
